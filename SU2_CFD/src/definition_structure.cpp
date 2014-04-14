@@ -327,7 +327,7 @@ void Solver_Preprocessing(CSolver ***solver_container, CGeometry **geometry,
   tne2_euler, tne2_ns,
   adj_tne2_euler, adj_tne2_ns,
   poisson, wave, fea, heat,
-  spalart_allmaras, menter_sst, machine_learning, transition,
+  des_97, spalart_allmaras, menter_sst, machine_learning, transition,
   template_solver;
   
   
@@ -337,7 +337,7 @@ void Solver_Preprocessing(CSolver ***solver_container, CGeometry **geometry,
   lin_euler        = false;	 lin_ns          = false;  lin_turb  = false;
   tne2_euler       = false;  tne2_ns         = false;
   adj_tne2_euler   = false;  adj_tne2_ns     = false;
-  spalart_allmaras = false;  menter_sst      = false;   machine_learning = false;
+  des_97           = false;  spalart_allmaras = false;  menter_sst      = false;   machine_learning = false;
   poisson          = false;
   wave             = false;
   fea              = false;
@@ -372,6 +372,7 @@ void Solver_Preprocessing(CSolver ***solver_container, CGeometry **geometry,
     switch (config->GetKind_Turb_Model()){
       case SA: spalart_allmaras = true; break;
       case SST: menter_sst = true; break;
+      case DES97: des_97 = true; break;
       case ML: machine_learning = true;break;
         
       default: cout << "Specified turbulence model unavailable or none selected" << endl; exit(1); break;
@@ -404,6 +405,11 @@ void Solver_Preprocessing(CSolver ***solver_container, CGeometry **geometry,
     if (turbulent) {
       if (spalart_allmaras) {
         solver_container[iMGlevel][TURB_SOL] = new CTurbSASolver(geometry[iMGlevel], config, iMGlevel);
+        solver_container[iMGlevel][FLOW_SOL]->Preprocessing(geometry[iMGlevel], solver_container[iMGlevel], config, iMGlevel, NO_RK_ITER, RUNTIME_FLOW_SYS, false);
+        solver_container[iMGlevel][TURB_SOL]->Postprocessing(geometry[iMGlevel], solver_container[iMGlevel], config, iMGlevel);
+      }
+      else if (des_97) {
+        solver_container[iMGlevel][TURB_SOL] = new CTurbDES97Solver(geometry[iMGlevel], config, iMGlevel);
         solver_container[iMGlevel][FLOW_SOL]->Preprocessing(geometry[iMGlevel], solver_container[iMGlevel], config, iMGlevel, NO_RK_ITER, RUNTIME_FLOW_SYS, false);
         solver_container[iMGlevel][TURB_SOL]->Postprocessing(geometry[iMGlevel], solver_container[iMGlevel], config, iMGlevel);
       }
@@ -471,7 +477,7 @@ void Integration_Preprocessing(CIntegration **integration_container,
   euler, adj_euler, lin_euler,
   ns, adj_ns, lin_ns,
   turbulent, adj_turb, lin_turb,
-  spalart_allmaras, menter_sst,machine_learning,
+  des_97, spalart_allmaras, menter_sst,machine_learning,
   tne2_euler, adj_tne2_euler,
   tne2_ns, adj_tne2_ns,
   poisson, wave, fea, heat, template_solver, transition;
@@ -480,7 +486,7 @@ void Integration_Preprocessing(CIntegration **integration_container,
   euler            = false; adj_euler        = false; lin_euler         = false;
   ns               = false; adj_ns           = false; lin_ns            = false;
   turbulent        = false; adj_turb         = false; lin_turb          = false;
-  spalart_allmaras = false; menter_sst       = false; machine_learning  = false;
+  des_97           = false; spalart_allmaras = false; menter_sst       = false; machine_learning  = false;
   tne2_euler       = false; adj_tne2_euler   = false;
   tne2_ns          = false; adj_tne2_ns      = false;
   poisson          = false;
@@ -518,6 +524,7 @@ void Integration_Preprocessing(CIntegration **integration_container,
     switch (config->GetKind_Turb_Model()) {
       case SA: spalart_allmaras = true; break;
       case SST: menter_sst = true; break;
+      case DES97: des_97 = true; break;
       case ML: machine_learning = true; break;
       default: cout << "Specified turbulence model unavailable or none selected" << endl; exit(1); break;
     }
@@ -583,7 +590,7 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
   turbulent, adj_turb, lin_turb,
   tne2_euler, adj_tne2_euler,
   tne2_ns, adj_tne2_ns,
-  spalart_allmaras, menter_sst, machine_learning,
+  des_97, spalart_allmaras, menter_sst, machine_learning,
   poisson,
   wave,
   fea,
@@ -599,7 +606,7 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
   euler            = false;   ns               = false;   turbulent        = false;
   poisson          = false;
   adj_euler        = false;	  adj_ns           = false;	 adj_turb         = false;
-  wave             = false;   heat             = false;   fea              = false;   spalart_allmaras = false;
+  wave             = false;   heat             = false;   fea              = false;   spalart_allmaras = false; des_97 = false;
   tne2_euler       = false;   tne2_ns          = false;
   adj_tne2_euler   = false;	  adj_tne2_ns      = false;
   lin_euler        = false;   lin_ns           = false;   lin_turb         = false;	 menter_sst       = false;    machine_learning = false;
@@ -633,8 +640,9 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
   if (turbulent)
     switch (config->GetKind_Turb_Model()){
       case SA: spalart_allmaras = true; break;
-      case ML: machine_learning = true; break;
       case SST: menter_sst = true; constants = solver_container[MESH_0][TURB_SOL]->GetConstants(); break;
+      case DES97: des_97 = true; break;
+      case ML: machine_learning = true; break;
       default: cout << "Specified turbulence model unavailable or none selected" << endl; exit(1); break;
     }
   
@@ -1091,8 +1099,9 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
       case SPACE_UPWIND :
         for (iMGlevel = 0; iMGlevel <= config->GetMGLevels(); iMGlevel++){
           if (spalart_allmaras) numerics_container[iMGlevel][TURB_SOL][CONV_TERM] = new CUpwSca_TurbSA(nDim, nVar_Turb, config);
-          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][CONV_TERM] = new CUpwSca_TurbML(nDim, nVar_Turb, config);
           else if (menter_sst) numerics_container[iMGlevel][TURB_SOL][CONV_TERM] = new CUpwSca_TurbSST(nDim, nVar_Turb, config);
+          else if (des_97) numerics_container[iMGlevel][TURB_SOL][CONV_TERM] = new CUpwSca_TurbSA(nDim, nVar_Turb, config);
+          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][CONV_TERM] = new CUpwSca_TurbML(nDim, nVar_Turb, config);
         }
         break;
       default :
@@ -1107,15 +1116,17 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
       case AVG_GRAD :
         for (iMGlevel = 0; iMGlevel <= config->GetMGLevels(); iMGlevel++){
           if (spalart_allmaras) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGrad_TurbSA(nDim, nVar_Turb, config);
-          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGrad_TurbML(nDim, nVar_Turb, config);
           else if (menter_sst) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGrad_TurbSST(nDim, nVar_Turb, constants, config);
+          else if (des_97) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGrad_TurbSA(nDim, nVar_Turb, config);
+          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGrad_TurbML(nDim, nVar_Turb, config);
         }
         break;
       case AVG_GRAD_CORRECTED :
         for (iMGlevel = 0; iMGlevel <= config->GetMGLevels(); iMGlevel++){
           if (spalart_allmaras) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGradCorrected_TurbSA(nDim, nVar_Turb, config);
-          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGradCorrected_TurbML(nDim, nVar_Turb, config);
           else if (menter_sst) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGradCorrected_TurbSST(nDim, nVar_Turb, constants, config);
+          else if (des_97) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGradCorrected_TurbSA(nDim, nVar_Turb, config);
+          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][VISC_TERM] = new CAvgGradCorrected_TurbML(nDim, nVar_Turb, config);
         }
         break;
       case GALERKIN :
@@ -1133,8 +1144,9 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
       case PIECEWISE_CONSTANT :
         for (iMGlevel = 0; iMGlevel <= config->GetMGLevels(); iMGlevel++) {
           if (spalart_allmaras) numerics_container[iMGlevel][TURB_SOL][SOURCE_FIRST_TERM] = new CSourcePieceWise_TurbSA(nDim, nVar_Turb, config);
-          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][SOURCE_FIRST_TERM] = new CSourcePieceWise_TurbML(nDim, nVar_Turb, config);
           else if (menter_sst) numerics_container[iMGlevel][TURB_SOL][SOURCE_FIRST_TERM] = new CSourcePieceWise_TurbSST(nDim, nVar_Turb, constants, config);
+          else if (des_97) numerics_container[iMGlevel][TURB_SOL][SOURCE_FIRST_TERM] = new CSourcePieceWise_TurbDES97(nDim, nVar_Turb, config);
+          else if (machine_learning) numerics_container[iMGlevel][TURB_SOL][SOURCE_FIRST_TERM] = new CSourcePieceWise_TurbML(nDim, nVar_Turb, config);
           numerics_container[iMGlevel][TURB_SOL][SOURCE_SECOND_TERM] = new CSourceNothing(nDim, nVar_Turb, config);
         }
         break;
@@ -1149,13 +1161,17 @@ void Numerics_Preprocessing(CNumerics ****numerics_container,
         numerics_container[iMGlevel][TURB_SOL][CONV_BOUND_TERM] = new CUpwSca_TurbSA(nDim, nVar_Turb, config);
         numerics_container[iMGlevel][TURB_SOL][VISC_BOUND_TERM] = new CAvgGrad_TurbSA(nDim, nVar_Turb, config);
       }
-      else if (machine_learning) {
-        numerics_container[iMGlevel][TURB_SOL][CONV_BOUND_TERM] = new CUpwSca_TurbML(nDim, nVar_Turb, config);
-        numerics_container[iMGlevel][TURB_SOL][VISC_BOUND_TERM] = new CAvgGrad_TurbML(nDim, nVar_Turb, config);
-      }
       else if (menter_sst) {
         numerics_container[iMGlevel][TURB_SOL][CONV_BOUND_TERM] = new CUpwSca_TurbSST(nDim, nVar_Turb, config);
         numerics_container[iMGlevel][TURB_SOL][VISC_BOUND_TERM] = new CAvgGrad_TurbSST(nDim, nVar_Turb, constants, config);
+      }
+      else if (des_97) {
+        numerics_container[iMGlevel][TURB_SOL][CONV_BOUND_TERM] = new CUpwSca_TurbSA(nDim, nVar_Turb, config);
+        numerics_container[iMGlevel][TURB_SOL][VISC_BOUND_TERM] = new CAvgGrad_TurbSA(nDim, nVar_Turb, config);
+      }
+      else if (machine_learning) {
+        numerics_container[iMGlevel][TURB_SOL][CONV_BOUND_TERM] = new CUpwSca_TurbML(nDim, nVar_Turb, config);
+        numerics_container[iMGlevel][TURB_SOL][VISC_BOUND_TERM] = new CAvgGrad_TurbML(nDim, nVar_Turb, config);
       }
     }
   }

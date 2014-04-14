@@ -3878,8 +3878,9 @@ void COutput::SetHistory_Header(ofstream *ConvHist_file, CConfig *config) {
   char adj_flow_resid[]= ",\"Res_AdjFlow[0]\",\"Res_AdjFlow[1]\",\"Res_AdjFlow[2]\",\"Res_AdjFlow[3]\",\"Res_AdjFlow[4]\"";
   switch (config->GetKind_Turb_Model()) {
     case SA:	sprintf (turb_resid, ",\"Res_Turb[0]\""); break;
-    case ML:	sprintf (turb_resid, ",\"Res_Turb[0]\""); break;
     case SST:	sprintf (turb_resid, ",\"Res_Turb[0]\",\"Res_Turb[1]\""); break;
+    case DES97:	sprintf (turb_resid, ",\"Res_Turb[0]\""); break;
+    case ML:	sprintf (turb_resid, ",\"Res_Turb[0]\""); break;
   }
   char adj_turb_resid[]= ",\"Res_AdjTurb[0]\"";
   char levelset_resid[]= ",\"Res_LevelSet\"";
@@ -4089,8 +4090,9 @@ void COutput::SetConvergence_History(ofstream *ConvHist_file,
     if (turbulent) {
       switch (config[val_iZone]->GetKind_Turb_Model()){
         case SA:	nVar_Turb = 1; break;
-        case ML:	nVar_Turb = 1; break;
         case SST: nVar_Turb = 2; break;
+        case DES97:	nVar_Turb = 1; break;
+        case ML:	nVar_Turb = 1; break;
       }
     }
     if (transition) nVar_Trans = 2;
@@ -4105,8 +4107,9 @@ void COutput::SetConvergence_History(ofstream *ConvHist_file,
     if (turbulent) {
       switch (config[val_iZone]->GetKind_Turb_Model()){
         case SA:	nVar_AdjTurb = 1; break;
-        case ML:	nVar_AdjTurb = 1; break;
         case SST: nVar_AdjTurb = 2; break;
+        case DES97:	nVar_AdjTurb = 1; break;
+        case ML:	nVar_AdjTurb = 1; break;
       }
     }
     if (TNE2) nVar_AdjTNE2 = config[val_iZone]->GetnSpecies()+nDim+2;
@@ -4693,8 +4696,9 @@ void COutput::SetConvergence_History(ofstream *ConvHist_file,
             
             switch (config[val_iZone]->GetKind_Turb_Model()){
               case SA:	cout << "       Res[nu]"; break;
-              case ML:	cout << "       Res[nu]"; break;
               case SST:	cout << "     Res[kine]" << "     Res[omega]"; break;
+              case DES97:	cout << "       Res[nu]"; break;
+              case ML:	cout << "       Res[nu]"; break;
             }
             
             if (transition) { cout << "      Res[Int]" << "       Res[Re]"; }

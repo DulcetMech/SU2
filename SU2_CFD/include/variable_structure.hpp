@@ -2418,6 +2418,51 @@ public:
 
 };
 
+/*!
+ * \class CTurbDES97Variable
+ * \brief Main class for defining the variables of the turbulence model.
+ * \ingroup Turbulence_Model
+ * \author A. Bueno.
+ * \version 3.0.1 "eagle"
+ */
+
+class CTurbDES97Variable : public CTurbVariable {
+public:
+	/*!
+	 * \brief Constructor of the class.
+	 */
+	CTurbDES97Variable(void);
+  
+	/*!
+	 * \overload
+	 * \param[in] val_nu_tilde - Turbulent variable value (initialization value).
+	 * \param[in] val_muT  - The eddy viscosity
+	 * \param[in] val_ndim - Number of dimensions of the problem.
+	 * \param[in] val_nvar - Number of variables of the problem.
+	 * \param[in] config - Definition of the particular problem.
+	 */
+	CTurbDES97Variable(double val_nu_tilde, double val_muT, unsigned short val_ndim, unsigned short val_nvar, CConfig *config);
+  
+	/*!
+	 * \brief Destructor of the class.
+	 */
+	~CTurbDES97Variable(void);
+  
+	/*!
+	 * \brief Set the time spectral source term.
+	 * \param[in] val_var - Index of the variable.
+	 * \param[in] val_solution - Value of the time spectral source term. for the index <i>val_var</i>.
+	 */
+	void SetTimeSpectral_Source(unsigned short val_var, double val_source);
+  
+	/*!
+	 * \brief Get the time spectral source term.
+	 * \param[in] val_var - Index of the variable.
+	 * \return Value of the time spectral source term for the index <i>val_var</i>.
+	 */
+	double GetTimeSpectral_Source(unsigned short val_var);
+  
+};
 
 /*!
  * \class CTurbMLVariable

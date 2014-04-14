@@ -96,6 +96,34 @@ CTurbSAVariable::~CTurbSAVariable(void) {
   
 }
 
+CTurbDES97Variable::CTurbDES97Variable(void) : CTurbVariable() { }
+
+CTurbDES97Variable::CTurbDES97Variable(double val_nu_tilde, double val_muT, unsigned short val_ndim, unsigned short val_nvar, CConfig *config)
+: CTurbVariable(val_ndim, val_nvar, config) {
+  
+  bool dual_time = ((config->GetUnsteady_Simulation() == DT_STEPPING_1ST) ||
+                    (config->GetUnsteady_Simulation() == DT_STEPPING_2ND));
+  
+	/*--- Initialization of S-A variables ---*/
+	Solution[0] = val_nu_tilde;		Solution_Old[0] = val_nu_tilde;
+  
+	/*--- Initialization of the eddy viscosity ---*/
+	muT = val_muT;
+  
+	/*--- Allocate and initialize solution for the dual time strategy ---*/
+	if (dual_time) {
+		Solution_time_n[0]  = val_nu_tilde;
+		Solution_time_n1[0] = val_nu_tilde;
+	}
+  
+}
+
+CTurbDES97Variable::~CTurbDES97Variable(void) {
+  
+  if (TS_Source != NULL) delete [] TS_Source;
+  
+}
+
 CTurbMLVariable::CTurbMLVariable(void) : CTurbVariable() { }
 
 CTurbMLVariable::CTurbMLVariable(double val_nu_tilde, double val_muT, unsigned short val_ndim, unsigned short val_nvar, CConfig *config)

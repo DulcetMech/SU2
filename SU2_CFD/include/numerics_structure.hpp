@@ -3977,6 +3977,117 @@ public:
 };
 
 /*!
+ * \class CSourcePieceWise_TurbDES97
+ * \brief Class for integrating the source terms of the Spalart-Allmaras turbulence model equation.
+ * \ingroup SourceDiscr
+ * \author A. Bueno.
+ * \version 3.0.1 "eagle"
+ */
+class CSourcePieceWise_TurbDES97 : public CNumerics {
+private:
+	double cv1_3;
+	double k2;
+	double cb1;
+	double cw2;
+	double cw3_6;
+  double cb2_sigma;
+	double sigma;
+	double cb2;
+	double cw1;
+	double DivVelocity, Vorticity;
+	unsigned short iDim;
+	double nu, Ji, fv1, fv2, Omega, S, Shat, inv_Shat, dist_i_2, Ji_2, Ji_3, inv_k2_d2;
+	double r, g, g_6, glim, fw;
+	double norm2_Grad;
+	double dfv1, dfv2, dShat;
+	double dr, dg, dfw;;
+	double nu_hat_i;
+	double grad_nu_hat;
+	double prod_grads;
+	bool incompressible;
+  bool transition;
+  bool rotating_frame;
+  double div, StrainMag;
+  double beta, gamma_sep, gamma_eff, intermittency;
+  double Freattach, r_t, s1;
+  double Production, Destruction, CrossProduction;
+  
+  SpalartAllmarasInputs* SAInputs;
+  SpalartAllmarasConstants* SAConstants;
+  int nResidual;
+  int nJacobian;
+  double* testResidual;
+  double* testJacobian;
+  double** DUiDXj;
+  double* DNuhatDXj;
+public:
+  
+	/*!
+	 * \brief Constructor of the class.
+	 * \param[in] val_nDim - Number of dimensions of the problem.
+	 * \param[in] val_nVar - Number of variables of the problem.
+	 * \param[in] config - Definition of the particular problem.
+	 */
+	CSourcePieceWise_TurbDES97(unsigned short val_nDim, unsigned short val_nVar, CConfig *config);
+  
+	/*!
+	 * \brief Destructor of the class.
+	 */
+	~CSourcePieceWise_TurbDES97(void);
+  
+	/*!
+	 * \brief Residual for source term integration.
+	 * \param[out] val_residual - Pointer to the total residual.
+	 * \param[out] val_Jacobian_i - Jacobian of the numerical method at node i (implicit computation).
+	 * \param[out] val_Jacobian_j - Jacobian of the numerical method at node j (implicit computation).
+	 * \param[in] config - Definition of the particular problem.
+	 */
+	void ComputeResidual(double *val_residual, double **val_Jacobian_i, double **val_Jacobian_j, CConfig *config);
+  
+	/*!
+	 * \brief Residual for source term integration.
+	 * \param[in] intermittency_in - Value of the intermittency.
+	 */
+  void SetIntermittency(double intermittency_in);
+  
+  /*!
+	 * \brief Residual for source term integration.
+	 * \param[in] val_production - Value of the Production.
+	 */
+  void SetProduction(double val_production);
+  
+  /*!
+	 * \brief Residual for source term integration.
+	 * \param[in] val_destruction - Value of the Destruction.
+	 */
+  void SetDestruction(double val_destruction);
+  
+  /*!
+	 * \brief Residual for source term integration.
+	 * \param[in] val_crossproduction - Value of the CrossProduction.
+	 */
+  void SetCrossProduction(double val_crossproduction);
+  
+  /*!
+	 * \brief Residual for source term integration.
+	 * \param[in] val_production - Value of the Production.
+	 */
+  double GetProduction(void);
+  
+  /*!
+	 * \brief Residual for source term integration.
+	 * \param[in] val_destruction - Value of the Destruction.
+	 */
+  double GetDestruction(void);
+  
+  /*!
+	 * \brief Residual for source term integration.
+	 * \param[in] val_crossproduction - Value of the CrossProduction.
+	 */
+  double GetCrossProduction(void);
+};
+
+/*!
  * \class CSourcePieceWise_TurbML
  * \brief Class for integrating the source terms of the Spalart-Allmaras turbulence model equation.
  * \ingroup SourceDiscr

@@ -679,6 +679,9 @@ inline void CTurbSAVariable::SetTimeSpectral_Source(unsigned short val_var, doub
 
 inline double CTurbSAVariable::GetTimeSpectral_Source(unsigned short val_var) { return TS_Source[val_var]; }
 
+inline void CTurbDES97Variable::SetTimeSpectral_Source(unsigned short val_var, double val_source) { TS_Source[val_var] = val_source; }
+
+inline double CTurbDES97Variable::GetTimeSpectral_Source(unsigned short val_var) { return TS_Source[val_var]; }
 
 inline void CTurbMLVariable::SetTimeSpectral_Source(unsigned short val_var, double val_source) { TS_Source[val_var] = val_source; }
 

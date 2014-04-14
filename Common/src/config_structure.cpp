@@ -702,10 +702,6 @@ void CConfig::SetConfig_Options(unsigned short val_iZone, unsigned short val_nZo
   AddScalarOption("DRAG_IN_SONICBOOM", WeightCd, 0.0);
   /* DESCRIPTION: Sensitivity smoothing  */
   AddEnumOption("SENS_SMOOTHING", Kind_SensSmooth, Sens_Smoothing_Map, "NONE");
-  /* DESCRIPTION: Continuous governing equation set  */
-  AddEnumOption("CONTINUOUS_EQNS", Continuous_Eqns, ContinuousEqns_Map, "EULER");
-  /* DESCRIPTION: Discrete governing equation set */
-  AddEnumOption("DISCRETE_EQNS", Discrete_Eqns, DiscreteEqns_Map, "NONE");
   /* DESCRIPTION: Adjoint frozen viscosity */
   AddSpecialOption("FROZEN_VISC", Frozen_Visc, SetBoolOption, true);
   /* DESCRIPTION:  */
@@ -2925,6 +2921,7 @@ void CConfig::SetOutput(unsigned short val_software, unsigned short val_izone) {
         switch (Kind_Turb_Model) {
           case SA:  cout << "Spalart Allmaras" << endl; break;
           case SST: cout << "Menter's SST"     << endl; break;
+          case DES97: cout << "DES 97"     << endl; break;
           case ML: cout << "Machine Learning" <<endl;break;
         }
         break;
