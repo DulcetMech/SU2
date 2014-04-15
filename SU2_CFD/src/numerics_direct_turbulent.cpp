@@ -798,8 +798,8 @@ void CSourcePieceWise_TurbSST::ComputeResidual(double *val_residual, double **va
 
 CSourcePieceWise_TurbDES97::CSourcePieceWise_TurbDES97(unsigned short val_nDim, unsigned short val_nVar,
                                                  CConfig *config) : CNumerics(val_nDim, val_nVar, config) {
-  
-  incompressible = (config->GetKind_Regime() == INCOMPRESSIBLE);
+
+    incompressible = (config->GetKind_Regime() == INCOMPRESSIBLE);
   //transition     = (config->GetKind_Trans_Model() == LM);
   transition = false; // Debugging, -AA
   rotating_frame = config->GetRotating_Frame();

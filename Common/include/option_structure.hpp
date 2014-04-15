@@ -395,7 +395,7 @@ enum ENUM_CENTERED {
 static const map<string, ENUM_CENTERED> Centered_Map = CCreateMap<string, ENUM_CENTERED>
 ("NONE", NO_CENTERED)
 ("JST", JST)
-("JST_KE", JST_KE)
+("JST-KE", JST_KE)
 ("LAX-FRIEDRICH", LAX);
 
 /*!
