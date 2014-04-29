@@ -456,6 +456,10 @@ inline bool CConfig::GetDeform_Output(void) { return Deform_Output; }
 
 inline double CConfig::GetDeform_Tol_Factor(void) { return Deform_Tol_Factor; }
 
+inline double CConfig::GetYoung_modulus(void) { return Young_modulus; }
+
+inline double CConfig::GetPoisson_ratio(void) { return Poisson_ratio; }
+
 inline unsigned short CConfig::GetDeform_Stiffness_Type(void) { return Deform_Stiffness_Type; }
 
 inline bool CConfig::GetVisualize_Deformation(void) { return Visualize_Deformation; }
@@ -663,6 +667,8 @@ inline unsigned short CConfig::GetKind_Upwind_AdjTurb(void) { return Kind_Upwind
 inline unsigned short CConfig::GetKind_Inlet(void) { return Kind_Inlet; }
 
 inline unsigned short CConfig::GetnSections(void) { return nSections; }
+
+inline unsigned short CConfig::GetnVolSections(void) { return nVolSections; }
 
 inline void CConfig::SetKind_TimeIntScheme(unsigned short val_kind_timeintscheme) { Kind_TimeNumScheme = val_kind_timeintscheme; }
 

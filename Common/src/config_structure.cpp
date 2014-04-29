@@ -694,6 +694,8 @@ void CConfig::SetConfig_Options(unsigned short val_iZone, unsigned short val_nZo
   AddEnumOption("GEO_ORIENTATION_SECTIONS", Axis_Orientation, Axis_Orientation_Map, "Y_AXIS");
   /* DESCRIPTION: Percentage of new elements (% of the original number of elements) */
   AddScalarOption("GEO_NUMBER_SECTIONS", nSections, 5);
+  /* DESCRIPTION: Number of section cuts to make when calculating internal volume */
+  AddScalarOption("GEO_VOLUME_SECTIONS", nVolSections, 101);
   /* DESCRIPTION: Output sectional forces for specified markers. */
   AddSpecialOption("GEO_PLOT_SECTIONS", Plot_Section_Forces, SetBoolOption, false);
   /* DESCRIPTION: Mode of the GDC code (analysis, or gradient) */
@@ -965,6 +967,8 @@ void CConfig::SetConfig_Options(unsigned short val_iZone, unsigned short val_nZo
   AddScalarOption("DEFORM_TOL_FACTOR", Deform_Tol_Factor, 0.001);
   /* DESCRIPTION: Type of element stiffness imposed for FEA mesh deformation (INVERSE_VOLUME, WALL_DISTANCE, CONSTANT_STIFFNESS) */
   AddEnumOption("DEFORM_STIFFNESS_TYPE", Deform_Stiffness_Type, Deform_Stiffness_Map, "INVERSE_VOLUME");
+  AddScalarOption("YOUNGS_MODULUS", Young_modulus, 2E11);
+  AddScalarOption("POISSONS_RATIO", Poisson_ratio, 0.3);
   
   /*--- option related to rotorcraft problems ---*/
   /* CONFIG_CATEGORY: Rotorcraft problem */
