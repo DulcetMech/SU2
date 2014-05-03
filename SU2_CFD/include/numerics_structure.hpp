@@ -2307,7 +2307,7 @@ private:
         unsigned short iDim, iVar, jVar; /*!< \brief Iteration on dimension and variables. */
         double *Diff_U, *Diff_Lapl, /*!< \brief Diference of conservative variables and undivided laplacians. */
         *Velocity_i, *Velocity_j, /*!< \brief Velocity at node 0 and 1. */
-        *MeanVelocity, ProjVelocity, ProjVelocity_i, ProjVelocity_j,  /*!< \brief Mean and projected velocities. */
+        *MeanVelocity, *MeanDensityandVelocity, ProjVelocity, ProjVelocity_i, ProjVelocity_j,  /*!< \brief Mean and projected velocities. */
         Density_i, Density_j, Energy_i, Energy_j,  /*!< \brief Mean Density and energies. */
         sq_vel_i, sq_vel_j,   /*!< \brief Modulus of the velocity and the normal vector. */
         MeanDensity, MeanPressure, MeanEnthalpy, MeanEnergy, /*!< \brief Mean values of primitive variables. */

@@ -244,6 +244,56 @@ void CNumerics::GetInviscidProjFlux(double *val_density,
 
 }
 
+void CNumerics::GetInviscidProjFlux(double *val_density,
+                                    double *val_velocity,
+                                    double *val_density_velocity,
+                                    double *val_pressure,
+                                    double *val_enthalpy,
+                                    double *val_normal,
+                                    double *val_Proj_Flux) {
+    double rhou, rhov, rhow;
+
+
+    if (nDim == 2) {
+        rhou = val_density_velocity[0];
+        rhov = val_density_velocity[1];
+
+        val_Proj_Flux[0] = rhou*val_normal[0];
+        val_Proj_Flux[1] = (rhou*val_velocity[0]+(*val_pressure))*val_normal[0];
+        val_Proj_Flux[2] = rhou*val_velocity[1]*val_normal[0];
+        val_Proj_Flux[3] = rhou*(*val_enthalpy)*val_normal[0];
+
+        val_Proj_Flux[0] += rhov*val_normal[1];
+        val_Proj_Flux[1] += rhov*val_velocity[0]*val_normal[1];
+        val_Proj_Flux[2] += (rhov*val_velocity[1]+(*val_pressure))*val_normal[1];
+        val_Proj_Flux[3] += rhov*(*val_enthalpy)*val_normal[1];
+    }
+    else {
+        rhou = val_density_velocity[0];
+        rhov = val_density_velocity[1];
+        rhow = val_density_velocity[2];
+
+        val_Proj_Flux[0] = rhou*val_normal[0];
+        val_Proj_Flux[1] = (rhou*val_velocity[0]+(*val_pressure))*val_normal[0];
+        val_Proj_Flux[2] = rhou*val_velocity[1]*val_normal[0];
+        val_Proj_Flux[3] = rhou*val_velocity[2]*val_normal[0];
+        val_Proj_Flux[4] = rhou*(*val_enthalpy)*val_normal[0];
+
+        val_Proj_Flux[0] += rhov*val_normal[1];
+        val_Proj_Flux[1] += rhov*val_velocity[0]*val_normal[1];
+        val_Proj_Flux[2] += (rhov*val_velocity[1]+(*val_pressure))*val_normal[1];
+        val_Proj_Flux[3] += rhov*val_velocity[2]*val_normal[1];
+        val_Proj_Flux[4] += rhov*(*val_enthalpy)*val_normal[1];
+
+        val_Proj_Flux[0] += rhow*val_normal[2];
+        val_Proj_Flux[1] += rhow*val_velocity[0]*val_normal[2];
+        val_Proj_Flux[2] += rhow*val_velocity[1]*val_normal[2];
+        val_Proj_Flux[3] += (rhow*val_velocity[2]+(*val_pressure))*val_normal[2];
+        val_Proj_Flux[4] += rhow*(*val_enthalpy)*val_normal[2];
+    }
+
+}
+
 void CNumerics::GetInviscidProjFlux(double *val_U,
                                     double *val_V,
                                     double *val_normal,
