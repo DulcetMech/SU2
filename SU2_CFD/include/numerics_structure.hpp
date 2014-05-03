@@ -2296,7 +2296,7 @@ public:
 
 /*!
  * \class CCentJST_Flow
- * \brief Class for centered shceme - JST.
+ * \brief Class for centered shceme Kinetic Energy Preserving - JST_KE.
  * \ingroup ConvDiscr
  * \author F. Palacios.
  * \version 3.1.0 "eagle"
