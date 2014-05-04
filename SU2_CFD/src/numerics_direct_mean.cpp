@@ -211,11 +211,13 @@ CCentJST_KE_Flow::CCentJST_KE_Flow(unsigned short val_nDim, unsigned short val_n
   Gamma = config->GetGamma();
   Gamma_Minus_One = Gamma - 1.0;
 
+  /*--- Unsteady time step ---*/
+  TimeStep = config->GetDelta_UnstTimeND();
+
   grid_movement = config->GetGrid_Movement();
 
   /*--- Artifical dissipation part ---*/
   Param_p = 0.3;
-  Param_Kappa_2 = config->GetKappa_2nd_Flow();
   Param_Kappa_4 = config->GetKappa_4th_Flow();
 
   /*--- Allocate some structures ---*/
@@ -337,6 +339,7 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
     ProjVelocity_i -= ProjGridVel;
     ProjVelocity_j -= ProjGridVel;
   }
+  /* -------------------------------------*/
 
   Local_Lambda_i = (fabs(ProjVelocity_i)+SoundSpeed_i*Area);
   Local_Lambda_j = (fabs(ProjVelocity_j)+SoundSpeed_j*Area);
@@ -349,19 +352,19 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
   sc2 = 3.0*(double(Neighbor_i)+double(Neighbor_j))/(double(Neighbor_i)*double(Neighbor_j));
   sc4 = sc2*sc2/4.0;
 
-  Epsilon_2 = Param_Kappa_2*0.5*(Sensor_i+Sensor_j)*sc2;
-  Epsilon_4 = max(0.0, Param_Kappa_4-Epsilon_2)*sc4;
+//  Epsilon_2 = Param_Kappa_2*0.5*(Sensor_i+Sensor_j)*sc2;
+  Epsilon_4 = max(0.0, Param_Kappa_4)*sc4;
 
   /*--- Compute viscous part of the residual ---*/
 
   for (iVar = 0; iVar < nVar; iVar++)
-      val_residual[iVar] += Epsilon_2*(Diff_U[iVar])*StretchingFactor*MeanLambda;
+      val_residual[iVar] += - Epsilon_4*Diff_Lapl[iVar]*StretchingFactor*MeanLambda/(2*TimeStep);
 
   /*--- Jacobian computation ---*/
 
   if (implicit) {
 
-    cte_0 = Epsilon_2*StretchingFactor*MeanLambda;
+    cte_0 = 0;
 
     for (iVar = 0; iVar < (nVar-1); iVar++) {
       val_Jacobian_i[iVar][iVar] += cte_0;

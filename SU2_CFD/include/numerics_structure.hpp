@@ -769,6 +769,21 @@ public:
                            double *val_normal, double *val_Proj_Flux);
     
     /*!
+     * \brief Compute the projected inviscid flux vector.
+     * \param[in] val_density - Pointer to the density.
+     * \param[in] val_velocity - Pointer to the velocity.
+     * \param[in] val_density_velocity - Pointer to the velocity times the density at each cell.
+     * \param[in] val_pressure - Pointer to the pressure.
+     * \param[in] val_enthalpy - Pointer to the enthalpy.
+     * \param[in] val_normal - Normal vector, the norm of the vector is the area of the face.
+     * \param[out] val_Proj_Flux - Pointer to the projected flux.
+     */
+    void GetInviscidProjFlux(double *val_density, double *val_velocity, double *val_density_velocity,
+                           double *val_pressure, double *val_enthalpy,
+                           double *val_normal, double *val_Proj_Flux);
+
+
+    /*!
 	 * \brief Compute the projected inviscid flux vector.
 	 * \param[in] val_U - Conserved variables
 	 * \param[in] val_V - Primitive variables

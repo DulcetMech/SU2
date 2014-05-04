@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< Updated upstream
 <!-- Written by QtCreator 3.0.0, 2014-05-03T16:08:07. -->
+=======
+<!-- Written by QtCreator 3.0.0, 2014-05-03T14:12:56. -->
+>>>>>>> Stashed changes
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
