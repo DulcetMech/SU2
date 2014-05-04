@@ -358,7 +358,7 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
   /*--- Compute viscous part of the residual ---*/
 
   for (iVar = 0; iVar < nVar; iVar++)
-      val_residual[iVar] += - Epsilon_4*Diff_Lapl[iVar]*StretchingFactor*MeanLambda/(2*TimeStep);
+      val_residual[iVar] += - Epsilon_4*Diff_Lapl[iVar]*StretchingFactor*MeanLambda/(TimeStep);
 
   /*--- Jacobian computation ---*/
 
