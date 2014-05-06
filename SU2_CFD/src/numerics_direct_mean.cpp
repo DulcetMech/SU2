@@ -212,7 +212,7 @@ CCentJST_KE_Flow::CCentJST_KE_Flow(unsigned short val_nDim, unsigned short val_n
   Gamma_Minus_One = Gamma - 1.0;
 
   /*--- Unsteady time step ---*/
-  TimeStep = config->GetDelta_UnstTimeND();
+//  TimeStep = config->GetDelta_UnstTimeND();
 
   grid_movement = config->GetGrid_Movement();
 
@@ -358,7 +358,7 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
   /*--- Compute viscous part of the residual ---*/
 
   for (iVar = 0; iVar < nVar; iVar++)
-      val_residual[iVar] += - Epsilon_4*Diff_Lapl[iVar]*StretchingFactor*MeanLambda/(TimeStep);
+      val_residual[iVar] += - Epsilon_4*Diff_Lapl[iVar]*StretchingFactor*MeanLambda;
 
   /*--- Jacobian computation ---*/
 
