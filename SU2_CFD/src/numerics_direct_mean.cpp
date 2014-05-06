@@ -276,12 +276,14 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
   MeanEnthalpy = 0.5*(Enthalpy_i+Enthalpy_j);
   for (iDim = 0; iDim < nDim; iDim++)
     MeanVelocity[iDim] =  0.5*(Velocity_i[iDim]+Velocity_j[iDim]);
-    MeanDensityandVelocity[iDim] =  0.5*(Density_i*Velocity_i[iDim]+Density_j*Velocity_j[iDim]);
+    MeanDensityandVelocity[iDim] =  0.5*(Density_i*(Velocity_i[iDim])+Density_j*(Velocity_j[iDim]));
   MeanEnergy = 0.5*(Energy_i+Energy_j);
 
   /*--- Get projected flux tensor ---*/
 
   GetInviscidProjFlux(&MeanDensity, MeanVelocity, MeanDensityandVelocity, &MeanPressure, &MeanEnthalpy, Normal, ProjFlux);
+//  GetInviscidProjFlux(&MeanDensity, MeanVelocity, &MeanPressure, &MeanEnthalpy, Normal, ProjFlux);
+
 
   /*--- Residual of the inviscid flux ---*/
 
@@ -352,7 +354,6 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
   sc2 = 3.0*(double(Neighbor_i)+double(Neighbor_j))/(double(Neighbor_i)*double(Neighbor_j));
   sc4 = sc2*sc2/4.0;
 
-//  Epsilon_2 = Param_Kappa_2*0.5*(Sensor_i+Sensor_j)*sc2;
   Epsilon_4 = max(0.0, Param_Kappa_4)*sc4;
 
   /*--- Compute viscous part of the residual ---*/
@@ -364,11 +365,13 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
 
   if (implicit) {
 
-    cte_0 = 0;
+      cte_0 = (Epsilon_4*double(Neighbor_i+1))*StretchingFactor*MeanLambda;
+      cte_1 = (Epsilon_4*double(Neighbor_j+1))*StretchingFactor*MeanLambda;
+
 
     for (iVar = 0; iVar < (nVar-1); iVar++) {
       val_Jacobian_i[iVar][iVar] += cte_0;
-      val_Jacobian_j[iVar][iVar] -= cte_0;
+      val_Jacobian_j[iVar][iVar] -= cte_1;
     }
 
     /*--- Last row of Jacobian_i ---*/
