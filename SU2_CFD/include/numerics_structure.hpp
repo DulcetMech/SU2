@@ -779,7 +779,7 @@ public:
      * \param[out] val_Proj_Flux - Pointer to the projected flux.
      */
     void GetInviscidProjFlux(double *val_density, double *val_velocity, double *val_density_velocity,
-                           double *val_pressure, double *val_enthalpy,
+                           double *val_pressure, double *val_enthalpy, double *val_density_enthalpy,
                            double *val_normal, double *val_Proj_Flux);
 
 
@@ -2322,10 +2322,12 @@ private:
         unsigned short iDim, iVar, jVar; /*!< \brief Iteration on dimension and variables. */
         double *Diff_U, *Diff_Lapl, /*!< \brief Diference of conservative variables and undivided laplacians. */
         *Velocity_i, *Velocity_j, /*!< \brief Velocity at node 0 and 1. */
-        *MeanVelocity, *MeanDensityandVelocity, ProjVelocity, ProjVelocity_i, ProjVelocity_j,  /*!< \brief Mean and projected velocities. */
+        *MeanVelocity, ProjVelocity, ProjVelocity_i, ProjVelocity_j,  /*!< \brief Mean and projected velocities. */
         Density_i, Density_j, Energy_i, Energy_j,  /*!< \brief Mean Density and energies. */
         sq_vel_i, sq_vel_j,   /*!< \brief Modulus of the velocity and the normal vector. */
         MeanDensity, MeanPressure, MeanEnthalpy, MeanEnergy, /*!< \brief Mean values of primitive variables. */
+        *MeanDensityandVelocity, /*!< \brief Mean of the conservative variable of the momentum equation. */
+        MeanDensityandEnthalpy, /*!< \brief Mean of the conservative variable of the energy equation. */
         Param_p, Param_Kappa_2, Param_Kappa_4, /*!< \brief Artificial dissipation parameters. */
         Local_Lambda_i, Local_Lambda_j, MeanLambda, /*!< \brief Local eingenvalues. */
         Phi_i, Phi_j, sc2, sc4, StretchingFactor, /*!< \brief Streching parameters. */

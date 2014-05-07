@@ -274,14 +274,15 @@ void CCentJST_KE_Flow::ComputeResidual(double *val_residual, double **val_Jacobi
   MeanDensity = 0.5*(Density_i+Density_j);
   MeanPressure = 0.5*(Pressure_i+Pressure_j);
   MeanEnthalpy = 0.5*(Enthalpy_i+Enthalpy_j);
+  MeanDensityandEnthalpy = 0.5*(Enthalpy_i*Density_i + Enthalpy_j*Density_j);
   for (iDim = 0; iDim < nDim; iDim++)
     MeanVelocity[iDim] =  0.5*(Velocity_i[iDim]+Velocity_j[iDim]);
-    MeanDensityandVelocity[iDim] =  0.5*(Density_i*(Velocity_i[iDim])+Density_j*(Velocity_j[iDim]));
+    MeanDensityandVelocity[iDim] =  0.5*(Density_i*Velocity_i[iDim]+Density_j*Velocity_j[iDim]);
   MeanEnergy = 0.5*(Energy_i+Energy_j);
 
   /*--- Get projected flux tensor ---*/
 
-  GetInviscidProjFlux(&MeanDensity, MeanVelocity, MeanDensityandVelocity, &MeanPressure, &MeanEnthalpy, Normal, ProjFlux);
+  GetInviscidProjFlux(&MeanDensity, MeanVelocity, MeanDensityandVelocity, &MeanPressure, &MeanEnthalpy, &MeanDensityandEnthalpy, Normal, ProjFlux);
 //  GetInviscidProjFlux(&MeanDensity, MeanVelocity, &MeanPressure, &MeanEnthalpy, Normal, ProjFlux);
 
 
