@@ -261,13 +261,14 @@ void CNumerics::GetInviscidProjFlux(double *val_density,
 
         val_Proj_Flux[0] = rhou*val_normal[0];
 
-        rhou = val_density_velocity[0];
-        rhov = val_density_velocity[1];
+//        rhou = val_density_velocity[0];
+//        rhov = val_density_velocity[1];
 
         val_Proj_Flux[1] = (rhou*val_velocity[0]+(*val_pressure))*val_normal[0];
         val_Proj_Flux[2] = rhou*val_velocity[1]*val_normal[0];
 
-        val_Proj_Flux[3] = (*val_density_enthalpy)*val_velocity[0]*val_normal[0];
+        val_Proj_Flux[3] = rhou*(*val_enthalpy)*val_normal[0];
+//        val_Proj_Flux[3] = (*val_density_enthalpy)*val_velocity[0]*val_normal[0];
 
 
 
@@ -276,18 +277,20 @@ void CNumerics::GetInviscidProjFlux(double *val_density,
 
         val_Proj_Flux[0] += rhov*val_normal[1];
 
-        rhou = val_density_velocity[0];
-        rhov = val_density_velocity[1];
+//        rhou = val_density_velocity[0];
+//        rhov = val_density_velocity[1];
 
         val_Proj_Flux[1] += rhov*val_velocity[0]*val_normal[1];
         val_Proj_Flux[2] += (rhov*val_velocity[1]+(*val_pressure))*val_normal[1];
 
-        val_Proj_Flux[3] += (*val_density_enthalpy)*val_velocity[1]*val_normal[1];
+        val_Proj_Flux[3] += rhov*(*val_enthalpy)*val_normal[1];
+//        val_Proj_Flux[3] += (*val_density_enthalpy)*val_velocity[1]*val_normal[1];
     }
     else {
-        rhou = val_density_velocity[0];
-        rhov = val_density_velocity[1];
-        rhow = val_density_velocity[2];
+
+        rhou = (*val_density)*val_velocity[0];
+        rhov = (*val_density)*val_velocity[1];
+        rhow = (*val_density)*val_velocity[2];
 
         val_Proj_Flux[0] = rhou*val_normal[0];
         val_Proj_Flux[1] = (rhou*val_velocity[0]+(*val_pressure))*val_normal[0];
